@@ -1,0 +1,41 @@
+package logapi.service.impl;
+
+import logapi.beans.LogRecord;
+import logapi.service.ILogRecordService;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 先放入线程池，然后线程池定时录入数据库
+ * @author muzhantong
+ * create on 2020/4/29 4:34 下午
+ */
+@Slf4j
+public class DefaultLogRecordServiceImpl implements ILogRecordService {
+
+    @Resource
+    private LogRecordMapper logRecordMapper;
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void record(LogRecord logRecord) {
+        log.info("【logRecord】log={}", logRecord);
+        //throw new RuntimeException("sss");
+        logRecordMapper.insertSelective(logRecord);
+    }
+
+    @Override
+    public List<LogRecord> queryLog(String bizNo, String type) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<LogRecord> queryLogByBizNo(String bizNo, String type, String subType) {
+        return new ArrayList<>();
+    }
+
+
+}
